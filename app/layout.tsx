@@ -25,7 +25,7 @@ const bodyFace = localFont({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: siteConfig.title,
+  title: { default: siteConfig.title, template: `%s | ${profile.brand}` },
   description: siteConfig.description,
   openGraph: {
     title: siteConfig.title,

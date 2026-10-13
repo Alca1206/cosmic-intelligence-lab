@@ -11,29 +11,12 @@ import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [observedId, setObservedId] = useState("home");
-  // Only the home page has the sections, so nothing is highlighted on sub-pages.
-  const activeId = usePathname() === "/" ? observedId : "";
+  const pathname = usePathname();
   const toggleRef = useRef<HTMLButtonElement>(null);
 
-  // Highlight the link of the section currently crossing the middle of the screen.
-  useEffect(() => {
-    const sections = navItems
-      .map((item) => document.getElementById(item.id))
-      .filter((el): el is HTMLElement => el !== null);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setObservedId(entry.target.id);
-        }
-      },
-      { rootMargin: "-40% 0px -55% 0px" },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
+  // A link is active on its own page and on pages inside it (/projects/some-project).
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
 
   // While the mobile menu is open, Escape closes it and returns focus to the button.
   useEffect(() => {
@@ -48,9 +31,9 @@ export default function Navbar() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
 
-  const linkClass = (id: string) =>
+  const linkClass = (href: string) =>
     `rounded px-1 py-2 text-sm transition-colors hover:text-ink ${
-      activeId === id
+      isActive(href)
         ? "text-ink underline decoration-violet decoration-2 underline-offset-8"
         : "text-ink-muted"
     }`;
@@ -66,7 +49,7 @@ export default function Navbar() {
       </a>
 
       <div className="container-page flex h-16 items-center justify-between gap-6">
-        <Link href="/#home" className="flex items-center gap-3 rounded">
+        <Link href="/" className="flex items-center gap-3 rounded">
           <Logo />
           <span className="font-display text-base font-semibold tracking-tight">
             {profile.brand}
@@ -77,14 +60,14 @@ export default function Navbar() {
         <nav aria-label="Primary" className="hidden items-center gap-6 md:flex">
           <ul className="flex items-center gap-5">
             {navItems.map((item) => (
-              <li key={item.id}>
-                <a
-                  href={'/#${item.id}'}
-                  className={linkClass(item.id)}
-                  aria-current={activeId === item.id ? "location" : undefined}
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={linkClass(item.href)}
+                  aria-current={isActive(item.href) ? "page" : undefined}
                 >
                   {item.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -111,17 +94,17 @@ export default function Navbar() {
         <div id="mobile-menu" className="border-t border-line bg-space md:hidden">
           <nav aria-label="Mobile" className="container-page flex flex-col gap-1 py-4">
             {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={'/#${item.id}'}
+              <Link
+                key={item.href}
+                href={item.href}
                 onClick={() => setMenuOpen(false)}
-                aria-current={activeId === item.id ? "location" : undefined}
+                aria-current={isActive(item.href) ? "page" : undefined}
                 className={`rounded-md px-3 py-3 text-base hover:bg-surface ${
-                  activeId === item.id ? "bg-surface text-ink" : "text-ink-muted"
+                  isActive(item.href) ? "bg-surface text-ink" : "text-ink-muted"
                 }`}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
             <Button href={profile.contact.resume} className="mt-3">
               Résumé

@@ -12,5 +12,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.6,
     }));
-  return [{ url: siteConfig.url, changeFrequency: "monthly", priority: 1 }, ...detailPages];
+  const pages = ["", "/projects", "/research", "/playground", "/skills", "/about", "/contact"].map((path) => ({
+    url: `${siteConfig.url}${path}`,
+    changeFrequency: "monthly" as const,
+    priority: path === "" ? 1 : 0.8,
+  }));
+  return [...pages, ...detailPages];
 }

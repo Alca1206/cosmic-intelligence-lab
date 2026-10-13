@@ -11,6 +11,8 @@ export type Project = {
   detailPath: string | null;
   /** Honest labeling of where the project stands. */
   status: "placeholder" | "in-progress" | "complete";
+  /** Groups projects by colour on the star map. */
+  category: "Deep Learning" | "Data Engineering" | "LLM Apps";
 };
 
 export type SkillGroup = {

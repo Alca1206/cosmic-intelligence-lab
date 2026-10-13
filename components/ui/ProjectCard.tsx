@@ -14,7 +14,7 @@ const statusLabel: Record<Project["status"], string> = {
 
 export default function ProjectCard({ project }: { project: Project }) {
   const { title, summary, tags, repoUrl, detailPath, status } = project;
-    const detailHref =
+  const detailHref =
     detailPath ?? (projectDetails[project.slug] ? `/projects/${project.slug}` : null);
     
   return (
@@ -59,9 +59,9 @@ export default function ProjectCard({ project }: { project: Project }) {
             </span>
           )}
 
-          {detailPath ? (
+          {detailHref ? (
             <Link
-              href={detailPath}
+              href={detailHref}
               className="inline-flex items-center gap-1.5 text-ink hover:text-cyan"
             >
               Read project details

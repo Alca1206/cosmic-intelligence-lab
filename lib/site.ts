@@ -1,9 +1,12 @@
 import { profile } from "@/data/profile";
 
-// The public address of the site. We don't have a domain yet, so this reads an
-// environment variable you set when deploying (NEXT_PUBLIC_SITE_URL).
-// Until then it falls back to the local dev address.
-const rawUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// The public address of the site, used for link previews, the sitemap, and robots.txt.
+// Order: your own setting, then Vercel's production address (set automatically
+// when deployed there), then the local dev address.
+const vercelHost = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const rawUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (vercelHost ? `https://${vercelHost}` : "http://localhost:3000");
 
 export const siteConfig = {
   url: rawUrl.replace(/\/$/, ""), // no trailing slash

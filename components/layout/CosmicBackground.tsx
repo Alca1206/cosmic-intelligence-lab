@@ -196,8 +196,10 @@ export default function CosmicBackground() {
         className="absolute inset-0"
         style={{
           background: `
-            radial-gradient(60rem 40rem at 15% 0%, color-mix(in srgb, var(--color-violet) 16%, transparent), transparent 60%),
-            radial-gradient(50rem 36rem at 90% 100%, color-mix(in srgb, var(--color-cyan) 9%, transparent), transparent 60%)`,
+            radial-gradient(55rem 38rem at 12% 0%, rgba(110, 96, 220, 0.10), transparent 65%),
+            radial-gradient(50rem 36rem at 92% 100%, rgba(60, 120, 210, 0.08), transparent 65%),
+            radial-gradient(34rem 24rem at 100% 8%, rgba(170, 60, 140, 0.05), transparent 70%),
+            radial-gradient(30rem 22rem at 0% 100%, rgba(190, 120, 60, 0.035), transparent 70%)`,
         }}
       />
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />

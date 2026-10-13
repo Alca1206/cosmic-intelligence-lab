@@ -12,6 +12,7 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/Alca1206/Pneumonia-Detection-using-CNN",
     detailPath: null,
     status: "complete",
+    category: "Deep Learning",
   },
   {
     slug: "king-county-house-prices",
@@ -22,6 +23,7 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/Alca1206/housing_price_prediction",
     detailPath: null,
     status: "complete",
+    category: "Deep Learning",
   },
   {
     slug: "euro-energy-data-pipeline",
@@ -32,6 +34,7 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/Alca1206/Euro-Energy-Data-Pipeline",
     detailPath: null,
     status: "in-progress",
+    category: "Data Engineering",
   },
   {
     slug: "handwritten-character-recognition",
@@ -42,6 +45,7 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/Alca1206/digit_alphabet_cnn",
     detailPath: null,
     status: "complete",
+    category: "Deep Learning",
   },
   {
     slug: "job-agent",
@@ -52,5 +56,6 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/Alca1206/Job-Agent",
     detailPath: null,
     status: "in-progress",
+    category: "LLM Apps",
   },
 ];

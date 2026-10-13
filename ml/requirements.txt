@@ -1,0 +1,5 @@
+# Minimum versions. The committed artifact records the exact versions it was
+# generated with (see "environment" in public/ml/calibration-demo.json).
+numpy>=1.26
+scipy>=1.11
+scikit-learn>=1.5

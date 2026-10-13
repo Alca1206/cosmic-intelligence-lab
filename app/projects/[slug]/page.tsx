@@ -5,7 +5,6 @@ import { ArrowLeft } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Tag from "@/components/ui/Tag";
-import { profile } from "@/data/profile";
 import { projectDetails } from "@/data/project-details";
 import { projects } from "@/data/projects";
 
@@ -28,7 +27,7 @@ export async function generateMetadata({
   const detail = projectDetails[slug];
   if (!project || !detail) return {};
   return {
-    title: `${project.title} | ${profile.name}`,
+    title: project.title,
     description: detail.overview,
   };
 }
@@ -42,7 +41,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[slug
   return (
     <article className="container-page py-16 md:py-24">
       <Link
-        href="/#projects"
+        href="/projects"
         className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink"
       >
         <ArrowLeft size={16} aria-hidden="true" />
