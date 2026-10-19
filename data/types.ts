@@ -1,18 +1,32 @@
 // Shapes of our content. If a data file doesn't match, TypeScript tells you.
 
+import type { ProjectCategory } from "./categories.ts";
+
+/** The text on a project's own page. Optional: a project without it just links to GitHub. */
+export type ProjectDetail = {
+  /** One or two sentences at the top of the page. */
+  overview: string;
+  /** What it does / how it works. One short line each. */
+  highlights: string[];
+  /** Caveats and honest limits, e.g. "Results coming soon". */
+  notes: string[];
+};
+
 export type Project = {
+  /** URL name: lowercase words joined by dashes. Becomes /projects/<slug>. */
   slug: string;
   title: string;
+  /** Shown on the project card and the map. Only state what the repository supports. */
   summary: string;
   tags: string[];
   /** null = no repository yet. Never put a made-up URL here. */
   repoUrl: string | null;
-  /** null = no detail page yet. Later this becomes e.g. "/projects/stargaze-weather-bot". */
-  detailPath: string | null;
   /** Honest labeling of where the project stands. */
   status: "placeholder" | "in-progress" | "complete";
-  /** Groups projects by colour on the star map. */
-  category: "Deep Learning" | "Data Engineering" | "LLM Apps";
+  /** Groups projects by colour on the star map (see data/categories.ts). */
+  category: ProjectCategory;
+  /** Give the project its own page by adding this. Leave it out for a card only. */
+  detail?: ProjectDetail;
 };
 
 export type SkillGroup = {
