@@ -3,7 +3,7 @@ import { ArrowUpRight, Clock } from "lucide-react";
 import Card from "./Card";
 import Tag from "./Tag";
 import type { Project } from "@/data/types";
-import { projectDetails } from "@/data/project-details";
+import { projectPath } from "@/data/projects";
 
 // Words, not just colors, say where a project stands.
 const statusLabel: Record<Project["status"], string> = {
@@ -13,9 +13,8 @@ const statusLabel: Record<Project["status"], string> = {
 };
 
 export default function ProjectCard({ project }: { project: Project }) {
-  const { title, summary, tags, repoUrl, detailPath, status } = project;
-  const detailHref =
-    detailPath ?? (projectDetails[project.slug] ? `/projects/${project.slug}` : null);
+  const { title, summary, tags, repoUrl, status } = project;
+  const detailHref = projectPath(project);
     
   return (
     <Card className="flex h-full flex-col transition-colors hover:border-violet/50">
