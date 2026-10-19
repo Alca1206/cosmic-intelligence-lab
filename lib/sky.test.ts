@@ -70,3 +70,22 @@ test("lines form chains and branches, never triangles", () => {
     assert.equal(common.length, 0);
   }
 });
+
+test("scatter places every star, even when they cannot all keep the requested gap", async () => {
+  const { scatter } = await import("./sky.ts");
+  const bounds = { x: [-6.5, 6.5], y: [-3.6, 3.6], z: [-1.2, 1.2] } as const;
+  for (const n of [3, 5, 6, 8, 12]) {
+    const spots = scatter(n, 23, { x: [...bounds.x], y: [...bounds.y], z: [...bounds.z] }, 4.3, [[-0.6, -0.2, 0.3]]);
+    assert.equal(spots.length, n, `n=${n}`);
+    for (const p of spots) {
+      assert.ok(p[0] >= -6.5 && p[0] <= 6.5 && p[1] >= -3.6 && p[1] <= 3.6, "inside bounds");
+    }
+    assert.equal(new Set(spots.map((p) => p.join(","))).size, n, "all distinct");
+  }
+});
+
+test("scatter is deterministic", async () => {
+  const { scatter } = await import("./sky.ts");
+  const b = { x: [-5, 5] as [number, number], y: [-3, 3] as [number, number], z: [-1, 1] as [number, number] };
+  assert.deepEqual(scatter(6, 9, b, 3), scatter(6, 9, b, 3));
+});
