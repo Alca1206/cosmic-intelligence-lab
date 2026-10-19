@@ -1,8 +1,9 @@
 import { profile } from "./profile";
-import { projects } from "./projects";
+import { categories } from "./categories";
+import { projectPath, projects } from "./projects";
 import { researchEntries } from "./research";
 import { skillGroups } from "./skills";
-import { buildSky, distance, seededRandom, type DecorStar } from "@/lib/sky";
+import { buildSky, scatter, type DecorStar } from "@/lib/sky";
 
 // The star maps. Each map ("graph") has a hub star in the middle and stars
 // around it. Everything is built from the real data files, so adding a project
@@ -15,6 +16,8 @@ export type StarSpec = {
   label: string;
   /** One line shown on hover and in the list */
   summary: string;
+  /** Small themed line under the plain label, e.g. "the lab" */
+  subtitle?: string;
   href: string;
   position: Vec3;
   /** Star radius. Bigger = more important. */
@@ -40,20 +43,7 @@ export type UniverseGraph = {
 
 const VIOLET = "#a9bcff"; // a pale periwinkle: reads as blue-white on the dark sky
 const CYAN = "#55d6e8";
-const PINK = "#ff9ecb";
 const WHITE = "#f3f5fa";
-
-/** Scatter n stars irregularly (no ring, no grid), at least `gap` apart. Seeded, so stable. */
-function scatter(n: number, seed: number, bounds: { x: [number, number]; y: [number, number]; z: [number, number] }, gap: number, avoid: Vec3[] = []): Vec3[] {
-  const rand = seededRandom(seed);
-  const pick = (r: [number, number]) => r[0] + rand() * (r[1] - r[0]);
-  const out: Vec3[] = [];
-  for (let tries = 0; out.length < n && tries < 4000; tries++) {
-    const p: Vec3 = [pick(bounds.x), pick(bounds.y), pick(bounds.z)];
-    if ([...out, ...avoid].every((q) => distance(p, q) >= gap)) out.push(p);
-  }
-  return out;
-}
 
 // ---------- Home ----------
 
@@ -62,11 +52,11 @@ const researchSummary = researchEntries.every((e) => e.status === "proposal")
   : "Research questions, methods and findings.";
 
 const homeSpecs: Omit<StarSpec, "position">[] = [
-  { id: "projects", label: "Projects", summary: `${projects.length} projects, with source code on GitHub.`, href: "/projects", size: 0.34, color: VIOLET, kind: "node" },
-  { id: "playground", label: "ML Playground", summary: "A live calibration experiment you can interact with.", href: "/playground", size: 0.46, color: CYAN, kind: "featured" },
-  { id: "research", label: "Research", summary: researchSummary, href: "/research", size: 0.3, color: VIOLET, kind: "node" },
-  { id: "skills", label: "Skills", summary: `${skillGroups.map((g) => g.category).join(", ")}.`, href: "/skills", size: 0.3, color: VIOLET, kind: "node" },
-  { id: "contact", label: "Contact", summary: "How to reach me.", href: "/contact", size: 0.3, color: VIOLET, kind: "node" },
+  { id: "projects", subtitle: "constellations", label: "Projects", summary: `${projects.length} projects, with source code on GitHub.`, href: "/projects", size: 0.34, color: VIOLET, kind: "node" },
+  { id: "playground", subtitle: "the lab", label: "ML Playground", summary: "A live calibration experiment you can interact with.", href: "/playground", size: 0.46, color: CYAN, kind: "featured" },
+  { id: "research", subtitle: "the observatory", label: "Research", summary: researchSummary, href: "/research", size: 0.3, color: VIOLET, kind: "node" },
+  { id: "skills", subtitle: "instruments", label: "Skills", summary: `${skillGroups.map((g) => g.category).join(", ")}.`, href: "/skills", size: 0.3, color: VIOLET, kind: "node" },
+  { id: "contact", subtitle: "send a signal", label: "Contact", summary: "How to reach me.", href: "/contact", size: 0.3, color: VIOLET, kind: "node" },
 ];
 
 // Placed by hand: an irregular constellation, not a ring. You are the brightest star,
@@ -83,6 +73,7 @@ const homePositions: Record<string, Vec3> = {
 const homeHub: StarSpec = {
   id: "me",
   label: profile.name,
+  subtitle: "the origin",
   summary: "About me: background and what I'm looking for.",
   href: "/about",
   position: homePositions.me,
@@ -112,17 +103,12 @@ export const homeGraph: UniverseGraph = {
 
 // ---------- Projects ----------
 
-const categoryColor: Record<string, string> = {
-  "Deep Learning": VIOLET,
-  "Data Engineering": CYAN,
-  "LLM Apps": PINK,
-};
-
 const statusText = { complete: "Complete", "in-progress": "In progress", placeholder: "Placeholder" } as const;
 
 const projectHub: StarSpec = {
   id: "projects-hub",
   label: "Projects",
+  subtitle: "back to the sky",
   summary: "Back to the home map.",
   href: "/",
   position: [-0.6, -0.2, 0.3],
@@ -140,11 +126,13 @@ const projectPositions = scatter(
 const projectNodes: StarSpec[] = projects.map((p, i) => ({
   id: `project-${p.slug}`,
   label: p.title,
+  subtitle: p.category.toLowerCase().replace("llm", "LLM"),
   summary: `${p.category} · ${statusText[p.status]} · ${p.tags.slice(0, 3).join(", ")}`,
-  href: `/projects/${p.slug}`,
+  // Only link to a detail page that exists; otherwise stay on the projects page (never a 404).
+  href: projectPath(p) ?? "/projects",
   position: projectPositions[i],
   size: 0.32,
-  color: categoryColor[p.category],
+  color: categories[p.category],
   kind: "node" as const,
 }));
 const projectSky = buildSky({
@@ -164,7 +152,7 @@ export const projectsGraph: UniverseGraph = {
   nodes: projectNodes,
   decor: projectSky.stars,
   edges: projectSky.edges,
-  legend: Object.entries(categoryColor)
+  legend: Object.entries(categories)
     .filter(([name]) => projects.some((p) => p.category === name))
     .map(([label, color]) => ({ label, color })),
 };
