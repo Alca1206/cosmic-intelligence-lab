@@ -5,7 +5,6 @@ import { ArrowLeft } from "lucide-react";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import Tag from "@/components/ui/Tag";
-import { projectDetails } from "@/data/project-details";
 import { projects } from "@/data/projects";
 
 const statusLabel = {
@@ -14,9 +13,9 @@ const statusLabel = {
   complete: "Complete",
 } as const;
 
-// Build one page per project that has an entry in data/project-details.ts.
+// Build one page per project that has a `detail` in data/projects.ts.
 export function generateStaticParams() {
-  return projects.filter((p) => projectDetails[p.slug]).map((p) => ({ slug: p.slug }));
+  return projects.filter((p) => p.detail).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -24,7 +23,7 @@ export async function generateMetadata({
 }: PageProps<"/projects/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
-  const detail = projectDetails[slug];
+  const detail = project?.detail;
   if (!project || !detail) return {};
   return {
     title: project.title,
@@ -35,7 +34,7 @@ export async function generateMetadata({
 export default async function ProjectPage({ params }: PageProps<"/projects/[slug]">) {
   const { slug } = await params;
   const project = projects.find((p) => p.slug === slug);
-  const detail = projectDetails[slug];
+  const detail = project?.detail;
   if (!project || !detail) notFound();
 
   return (
