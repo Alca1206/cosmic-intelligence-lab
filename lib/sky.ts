@@ -82,3 +82,23 @@ export function buildSky(opts: SkyOptions): Sky {
   }
   return { stars, edges };
 }
+
+/**
+ * Scatter n stars irregularly (no ring, no grid), at least `gap` apart. Seeded, so stable.
+ * If they don't all fit, the gap is shrunk a little and the search continues, so adding
+ * another project never breaks the map.
+ */
+export function scatter(n: number, seed: number, bounds: { x: [number, number]; y: [number, number]; z: [number, number] }, gap: number, avoid: Vec3[] = []): Vec3[] {
+  const rand = seededRandom(seed);
+  const pick = (r: [number, number]) => r[0] + rand() * (r[1] - r[0]);
+  const out: Vec3[] = [];
+  let minGap = gap;
+  while (out.length < n) {
+    for (let tries = 0; out.length < n && tries < 1500; tries++) {
+      const p: Vec3 = [pick(bounds.x), pick(bounds.y), pick(bounds.z)];
+      if ([...out, ...avoid].every((q) => distance(p, q) >= minGap)) out.push(p);
+    }
+    minGap *= 0.92;
+  }
+  return out;
+}
