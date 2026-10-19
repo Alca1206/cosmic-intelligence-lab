@@ -77,3 +77,15 @@ See `ml/README.md` (Python venv, `pip install -r ml/requirements.txt`, `python m
 
 Digits are an easy, small-image task; one fixed held-out set; ECE depends on binning; temperature scaling only
 fixes average over-confidence; educational demo, not a production or clinical model.
+
+## Adding a project
+
+Everything about a project lives in **one entry** in `data/projects.ts`. Open it, copy the
+template in the comment at the top, paste it at the end of the list, fill it in, and save.
+The project card, its star on the map, its own page (if you add `detail`) and the sitemap
+entry all appear by themselves.
+
+- A new category is one line in `data/categories.ts` (its name and star colour).
+- `npm test` checks the entry (unique slug, known category, real GitHub link, no leftover
+  template text), so a typo is caught before you publish.
+- Only write what the repository's README supports, and set `status` honestly.
