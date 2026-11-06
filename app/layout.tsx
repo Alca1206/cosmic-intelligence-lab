@@ -23,8 +23,15 @@ const bodyFace = localFont({
   display: "swap",
 });
 
+// "" at the site root, "/repo-name" when hosted in a sub-folder (see next.config.ts).
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  // Next.js adds the sub-folder to page links but not to these generated icon files.
+  icons: basePath
+    ? { icon: `${basePath}/icon`, apple: `${basePath}/apple-icon` }
+    : undefined,
   title: { default: siteConfig.title, template: `%s | ${profile.brand}` },
   description: siteConfig.description,
   openGraph: {
