@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   assetPrefix: "/cosmic-intelligence-lab/",
   images: {
     unoptimized: true,
-  }
+  },
   /* config options here */
   cacheComponents: true,
   partialPrefetching: true,
