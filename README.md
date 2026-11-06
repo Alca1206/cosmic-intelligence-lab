@@ -89,3 +89,37 @@ entry all appear by themselves.
 - `npm test` checks the entry (unique slug, known category, real GitHub link, no leftover
   template text), so a typo is caught before you publish.
 - Only write what the repository's README supports, and set `status` honestly.
+
+## Deploying to GitHub Pages (free, no domain needed)
+
+The site is exported as plain static files, and a GitHub Actions workflow
+(`.github/workflows/deploy.yml`) builds and publishes it every time you push to `main`.
+
+1. On GitHub, create a **public** repository named exactly `<your-username>.github.io`
+   (for example `Alca1206.github.io`). Leave "Add a README" unticked. The site is then
+   served at the root: `https://<your-username>.github.io`.
+   (Any other repository name also works, but the site is served at
+   `https://<your-username>.github.io/<repository-name>/`.)
+2. In this folder (the one that contains `package.json`), push the code:
+
+   ```powershell
+   git add .
+   git commit -m "Initial portfolio"
+   git branch -M main
+   git remote add origin https://github.com/<your-username>/<repository-name>.git
+   git push -u origin main
+   ```
+
+3. In the repository go to **Settings -> Pages -> Build and deployment -> Source** and choose
+   **GitHub Actions**.
+4. Open the **Actions** tab and watch "Deploy to GitHub Pages" run (about 2 minutes). When
+   it turns green, your site is live at the address from step 1.
+
+Every later `git push` to `main` re-publishes the site. If the workflow fails, the Actions tab
+shows which step (lint, tests or build) failed, so a broken change never goes live.
+
+Notes:
+- `npm run build` writes the finished site to the `out` folder. You can preview it with any
+  static file server.
+- The workflow works out the address itself, so nothing needs configuring for either
+  repository name.

@@ -8,7 +8,8 @@ import { loadCalibrationDataset } from "@/lib/ml/load";
 import { DatasetError } from "@/lib/ml/dataset";
 import type { CalibrationDataset } from "@/lib/ml/types";
 
-const DATA_URL = "/ml/calibration-demo.json";
+// The base path is empty at the site root and "/repo-name" when hosted in a sub-folder.
+const DATA_URL = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ml/calibration-demo.json`;
 
 type Result = { data: CalibrationDataset } | { error: string } | null;
 

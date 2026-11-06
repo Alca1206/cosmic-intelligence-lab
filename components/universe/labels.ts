@@ -5,6 +5,7 @@ import { allStars, type StarSpec, type UniverseGraph } from "@/data/universe";
 export type LabelSpec = {
   id: string;
   text: string;
+  subtitle?: string;
   /** How far above the star (in scene units) the label sits */
   lift: number;
   kind: StarSpec["kind"];
@@ -16,6 +17,7 @@ export function labelsFor(graph: UniverseGraph): LabelSpec[] {
   return allStars(graph).map((s) => ({
     id: s.id,
     text: shorten(s.label),
+    subtitle: s.subtitle,
     lift: s.size + 0.55,
     kind: s.kind,
   }));

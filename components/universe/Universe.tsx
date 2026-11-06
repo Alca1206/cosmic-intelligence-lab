@@ -2,7 +2,14 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import type * as THREE from "three";
@@ -31,7 +38,9 @@ function webglSupported(): boolean {
   if (webglCache === null) {
     try {
       const canvas = document.createElement("canvas");
-      webglCache = Boolean(canvas.getContext("webgl2") ?? canvas.getContext("webgl"));
+      webglCache = Boolean(
+        canvas.getContext("webgl2") ?? canvas.getContext("webgl"),
+      );
     } catch {
       webglCache = false;
     }
@@ -39,11 +48,20 @@ function webglSupported(): boolean {
   return webglCache;
 }
 
-function labelClass(spec: LabelSpec, hovered: boolean, narrow: boolean): string {
+function labelClass(
+  spec: LabelSpec,
+  hovered: boolean,
+  narrow: boolean,
+): string {
   // On small screens labels would collide, so only key ones show (the list names everything).
   if (narrow && !hovered && spec.kind === "node") return "opacity-0";
-  const tone = hovered ? "text-ink" : spec.kind === "node" ? "text-ink-muted" : "text-ink";
-  const weight = spec.kind === "node" ? "text-xs" : "font-display text-sm font-medium";
+  const tone = hovered
+    ? "text-ink"
+    : spec.kind === "node"
+      ? "text-ink-muted"
+      : "text-ink";
+  const weight =
+    spec.kind === "node" ? "text-xs" : "font-display text-sm font-medium";
   return `${weight} ${tone} transition-colors [text-shadow:0_1px_6px_#080b14,0_0_12px_#080b14]`;
 }
 
@@ -74,20 +92,28 @@ export default function Universe({ graph, variant = "hero" }: Props) {
   const [flyToId, setFlyToId] = useState<string | null>(null);
   const [leaving, setLeaving] = useState(false);
   // Where the visitor clicked, and where they are going. Used once, on arrival.
-  const [pending, setPending] = useState<{ href: string; from: string } | null>(null);
+  const [pending, setPending] = useState<{ href: string; from: string } | null>(
+    null,
+  );
   const [visible, setVisible] = useState(true);
 
   const stars = useMemo(() => allStars(graph), [graph]);
   const labels = useMemo(() => labelsFor(graph), [graph]);
   // The list: every outer star, plus the hub when it leads somewhere new (About me).
   const listItems = useMemo(
-    () => (graph.hub.href === "/about" ? [...graph.nodes, { ...graph.hub, label: "About me" }] : graph.nodes),
+    () =>
+      graph.hub.href === "/about"
+        ? [...graph.nodes, { ...graph.hub, label: "About me" }]
+        : graph.nodes,
     [graph],
   );
 
   const observe = useCallback((el: HTMLDivElement | null) => {
     if (!el) return;
-    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.05 });
+    const io = new IntersectionObserver(
+      ([entry]) => setVisible(entry.isIntersecting),
+      { threshold: 0.05 },
+    );
     io.observe(el);
   }, []);
 
@@ -133,7 +159,8 @@ export default function Universe({ graph, variant = "hero" }: Props) {
 
   const onArrive = useCallback(() => {
     // Only continue if we are still on the page where the click happened.
-    if (pending && pathRef.current === pending.from) go(pending.href, pending.from);
+    if (pending && pathRef.current === pending.from)
+      go(pending.href, pending.from);
     setPending(null);
   }, [pending, go]);
 
@@ -153,7 +180,11 @@ export default function Universe({ graph, variant = "hero" }: Props) {
       <strong className="text-ink">{hovered.label}</strong> · {hovered.summary}
     </>
   ) : webgl ? (
-    (coarse ? "Tap a bright star to fly there." : "Move your mouse over the sky. Click a bright star to fly there.")
+    coarse ? (
+      "Tap a bright star to fly there."
+    ) : (
+      "Move your mouse over the sky. Click a bright star to fly there."
+    )
   ) : (
     "Choose a destination."
   );
@@ -165,7 +196,11 @@ export default function Universe({ graph, variant = "hero" }: Props) {
         : "border-line bg-space/70 text-ink-muted hover:border-cyan hover:text-ink"
     }`;
 
-  const listLink = (s: StarSpec, className: string, children: React.ReactNode) => (
+  const listLink = (
+    s: StarSpec,
+    className: string,
+    children: React.ReactNode,
+  ) => (
     <Link
       href={s.href}
       onClick={(e) => {
@@ -183,7 +218,10 @@ export default function Universe({ graph, variant = "hero" }: Props) {
   );
 
   return (
-    <div ref={observe} className={`relative flex w-full flex-col ${hero ? "lg:h-full" : ""}`}>
+    <div
+      ref={observe}
+      className={`relative flex w-full flex-col ${hero ? "lg:h-full" : ""}`}
+    >
       {webgl ? (
         <div
           className={
@@ -191,7 +229,10 @@ export default function Universe({ graph, variant = "hero" }: Props) {
               ? "relative h-[26rem] w-full sm:h-[32rem] lg:absolute lg:inset-0 lg:h-auto"
               : "relative h-[24rem] w-full overflow-hidden rounded-lg border border-line bg-space/40 sm:h-[30rem]"
           }
-          style={{ cursor: hoveredId ? "pointer" : "default", touchAction: "pan-y" }}
+          style={{
+            cursor: hoveredId ? "pointer" : "default",
+            touchAction: "pan-y",
+          }}
           onPointerMove={(e) => {
             const r = e.currentTarget.getBoundingClientRect();
             pointer.current = {
@@ -216,7 +257,10 @@ export default function Universe({ graph, variant = "hero" }: Props) {
             labelEls={labelEls}
           />
           {/* Labels follow their stars; positions are set every frame by LabelDriver */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 overflow-hidden"
+          >
             {labels.map((spec) => (
               <span
                 key={spec.id}
@@ -224,28 +268,50 @@ export default function Universe({ graph, variant = "hero" }: Props) {
                   if (el) labelEls.current.set(spec.id, el);
                   else labelEls.current.delete(spec.id);
                 }}
-                className={`invisible absolute left-0 top-0 whitespace-nowrap ${labelClass(spec, hoveredId === spec.id, !wide)}`}
+                className={`invisible absolute left-0 top-0 flex flex-col items-center whitespace-nowrap ${labelClass(spec, hoveredId === spec.id, !wide)}`}
               >
                 {spec.text}
+                {spec.subtitle ? (
+                  <span className="font-sans text-[10px] font-normal tracking-wide text-ink-muted/70">
+                    {spec.subtitle}
+                  </span>
+                ) : null}
               </span>
             ))}
           </div>
         </div>
       ) : webgl === false ? (
         <p className="px-6 py-6 text-center text-sm text-ink-muted">
-          Your browser can&apos;t show the 3D map, so here are the same destinations as links.
+          Your browser can&apos;t show the 3D map, so here are the same
+          destinations as links.
         </p>
       ) : null}
 
       {hero ? (
         <div className="relative flex flex-col items-center gap-2 px-4 pb-8 pt-2 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:bottom-3 lg:items-end lg:px-8 lg:pb-0">
-          <p className="text-center text-xs text-ink-muted lg:text-right" aria-live="polite">
+          <p
+            className="text-center text-xs text-ink-muted lg:text-right"
+            aria-live="polite"
+          >
             {hint}
           </p>
           <nav aria-label="Destinations" className="pointer-events-auto">
             <ul className="flex max-w-3xl flex-wrap justify-center gap-1.5 lg:justify-end">
               {listItems.map((s) => (
-                <li key={s.id}>{listLink(s, linkClass(s.id), s.label)}</li>
+                <li key={s.id}>
+                  {listLink(
+                    s,
+                    linkClass(s.id),
+                    <>
+                      {s.label}
+                      {s.subtitle ? (
+                        <span className="ml-1.5 text-ink-muted/70">
+                          · {s.subtitle}
+                        </span>
+                      ) : null}
+                    </>,
+                  )}
+                </li>
               ))}
             </ul>
           </nav>
@@ -263,10 +329,17 @@ export default function Universe({ graph, variant = "hero" }: Props) {
               </Link>
             )}
             {graph.legend && (
-              <ul aria-label="Colour key" className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-muted">
+              <ul
+                aria-label="Colour key"
+                className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-muted"
+              >
                 {graph.legend.map((l) => (
                   <li key={l.label} className="flex items-center gap-1.5">
-                    <span className="size-2.5 rounded-full" style={{ background: l.color }} aria-hidden="true" />
+                    <span
+                      className="size-2.5 rounded-full"
+                      style={{ background: l.color }}
+                      aria-hidden="true"
+                    />
                     {l.label}
                   </li>
                 ))}

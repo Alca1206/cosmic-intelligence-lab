@@ -26,8 +26,9 @@ export function makeStarTexture(size = 256): THREE.CanvasTexture {
   const halo = ctx.createRadialGradient(c, c, 0, c, c, c);
   halo.addColorStop(0, "rgba(255,255,255,1)");
   halo.addColorStop(0.035, "rgba(255,255,255,0.95)");
-  halo.addColorStop(0.1, "rgba(255,255,255,0.32)");
-  halo.addColorStop(0.28, "rgba(255,255,255,0.07)");
+  halo.addColorStop(0.07, "rgba(255,255,255,0.3)");
+  halo.addColorStop(0.18, "rgba(255,255,255,0.04)");
+  halo.addColorStop(0.4, "rgba(255,255,255,0)");
   halo.addColorStop(1, "rgba(255,255,255,0)");
   ctx.fillStyle = halo;
   ctx.fillRect(0, 0, size, size);
