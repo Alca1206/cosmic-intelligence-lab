@@ -1,15 +1,21 @@
+
 import type { NextConfig } from "next";
 
+const basePath =
+  process.env.NEXT_PUBLIC_BASE_PATH ||
+  "/cosmic-intelligence-lab";
+
 const nextConfig: NextConfig = {
-   output: "export",
-  basePath: "/cosmic-intelligence-lab",
-  assetPrefix: "/cosmic-intelligence-lab/",
+  output: "export",
+
+  basePath,
+
+  assetPrefix: basePath ? `${basePath}/` : "",
+
   images: {
     unoptimized: true,
   },
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+
   turbopack: {
     rules: {
       "*.css": {
