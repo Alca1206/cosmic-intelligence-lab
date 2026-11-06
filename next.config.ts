@@ -1,4 +1,3 @@
-
 import type { NextConfig } from "next";
 
 const basePath =
@@ -7,16 +6,13 @@ const basePath =
 
 const nextConfig: NextConfig = {
   output: "export",
-
   basePath,
-
   assetPrefix: basePath ? `${basePath}/` : "",
-
   images: {
     unoptimized: true,
   },
 
-  turbopack: {
+turbopack: {
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],
