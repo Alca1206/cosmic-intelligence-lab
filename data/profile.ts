@@ -27,9 +27,10 @@ export const profile: Profile = {
     ],
   },
   contact: {
-    email: null, // e.g. "you@example.com"
+    email: "guptadev.12034@gmail.com",
     github: "https://github.com/Alca1206",
-    linkedin: null, // e.g. "https://www.linkedin.com/in/your-handle"
-    resume: null, // put the PDF in /public, then use e.g. "/resume.pdf"
+    linkedin: "https://www.linkedin.com/in/devgupta1206/",
+    // PDF lives in /public; the prefix keeps the link working on a GitHub Pages subfolder.
+    resume: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/Dev_Gupta_Resume.pdf`,
   },
 };
