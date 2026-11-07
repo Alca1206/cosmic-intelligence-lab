@@ -1,10 +1,10 @@
 import type { ResearchEntry } from "./types";
 
-// A working thesis proposal title: NOT a publication and NOT a result.
+// The planned master's thesis (PyTorch, ResNet-20, CIFAR-10): NOT a publication and NOT a result.
 export const researchEntries: ResearchEntry[] = [
   {
     title:
-      "Predictive Confidence Calibration under ANN Quantization and ANN-to-SNN Conversion: A Controlled Comparative Study",
+      "Confidence Calibration in Quantized and Spiking Neural Networks",
     status: "proposal",
     sections: {
       researchQuestion: null,
