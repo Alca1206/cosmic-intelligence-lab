@@ -17,13 +17,13 @@ export const profile: Profile = {
     paragraphs: [
       "I'm a Data Science master's student specializing in machine learning and deep learning, with an engineering background and professional software development experience.",
       "I'm looking for ML Engineer, AI Engineer, and related technical roles, where I can turn ideas into working systems and investigate how models behave.",
-      "[Placeholder] Add a sentence or two about your professional interests.",
+      "Before my master's I spent nearly three years at NTT DATA building secure enterprise APIs. Now I bring those habits — testing, CI/CD and careful engineering — to applied ML and LLM systems such as local RAG applications and PyTorch models. I'm available full-time from March 2027.",
     ],
     facts: [
-      { label: "University", value: "[Your university]" },
-      { label: "Degree", value: "[Your degree and expected graduation]" },
-      { label: "Previous experience", value: "[Previous role / company]" },
-      { label: "Education", value: "[Earlier education]" },
+      { label: "University", value: "University of Europe for Applied Sciences, Berlin" },
+      { label: "Degree", value: "M.Sc. Data Science, expected February 2027" },
+      { label: "Previous experience", value: "Software Engineer, NTT DATA (10/2021 – 07/2024)" },
+      { label: "Education", value: "B.E. Computer Science and Engineering, Cambridge Institute of Technology (VTU)" },
     ],
   },
   contact: {
